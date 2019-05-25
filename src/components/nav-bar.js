@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import SearchIcon from "@material-ui/icons/Search";
 import { InputBase } from "@material-ui/core";
 import SearchContext from "../context/search";
+import ReadCounter from "./read-list";
 
 const useStyles = makeStyles({
   title: {},
@@ -42,6 +43,7 @@ const NavBar = () => {
             onChange={e => setValue(e.target.value)}
           />
         </div>
+        <ReadCounter />
       </ToolBar>
     </AppBar>
   );

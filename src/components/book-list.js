@@ -4,12 +4,13 @@ import React, {
   useContext
 } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Book from "./book-item";
 import {
   findAllBooks,
   searchBooks
 } from "../../lib/client";
 import SearchContext from "../context/search";
+
+const Book = React.lazy(() => import("./book-item"));
 
 const BookList = () => {
   const search = useContext(SearchContext);
@@ -29,16 +30,22 @@ const BookList = () => {
         .then(setBooksStatus)
         .catch(setBooksStatus);
     }
+
+    return () => {
+      // clean up
+    };
   }, [search.value, setBooksStatus]);
   if (booksStatus.loading) {
     return <CircularProgress size={60} />;
   }
   return (
-    <div style={{ paddingTop: 60 }}>
-      {booksStatus.data.map(bookItem => (
-        <Book book={bookItem} key={bookItem.id} />
-      ))}
-    </div>
+    <React.Suspense fallback={<CircularProgress />}>
+      <div style={{ paddingTop: 60 }}>
+        {booksStatus.data.map(bookItem => (
+          <Book book={bookItem} key={bookItem.id} />
+        ))}
+      </div>
+    </React.Suspense>
   );
 };
 
