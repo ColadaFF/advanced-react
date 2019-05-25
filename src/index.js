@@ -1,9 +1,15 @@
-import React from "react";
+import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import BookList from "./components/book-list";
+import NavBar from "./components/nav-bar";
 
 const App = () => {
-  return <BookList />;
+  return (
+    <Fragment>
+      <NavBar />
+      <BookList />
+    </Fragment>
+  );
 };
 
 const element = document.getElementById("root");

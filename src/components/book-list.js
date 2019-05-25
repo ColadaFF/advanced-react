@@ -30,9 +30,13 @@ const BookList = () => {
   if (booksStatus.loading) {
     return <CircularProgress size={60} />;
   }
-  return booksStatus.data.map(bookItem => (
-    <Book book={bookItem} key={bookItem.id} />
-  ));
+  return (
+    <div style={{ paddingTop: 60 }}>
+      {booksStatus.data.map(bookItem => (
+        <Book book={bookItem} key={bookItem.id} />
+      ))}
+    </div>
+  );
 };
 
 export default BookList;
