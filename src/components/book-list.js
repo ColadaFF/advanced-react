@@ -4,6 +4,7 @@ import React, {
   useContext
 } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { from } from "rxjs";
 import {
   findAllBooks,
   searchBooks
@@ -21,20 +22,28 @@ const BookList = () => {
   });
 
   useEffect(() => {
-    if (search.value === "") {
-      findAllBooks()
-        .then(setBooksStatus)
-        .catch(setBooksStatus);
+    let subscription;
+    if (search.lastValue === "") {
+      const promise = findAllBooks();
+      subscription = from(promise).subscribe(
+        setBooksStatus,
+        setBooksStatus
+      );
     } else {
-      searchBooks(search.value)
-        .then(setBooksStatus)
-        .catch(setBooksStatus);
+      const promise = searchBooks(search.lastValue);
+      subscription = from(promise).subscribe(
+        setBooksStatus,
+        setBooksStatus
+      );
     }
 
     return () => {
       // clean up
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
-  }, [search.value, setBooksStatus]);
+  }, [search.lastValue, setBooksStatus]);
   if (booksStatus.loading) {
     return <CircularProgress size={60} />;
   }

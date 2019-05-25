@@ -2,17 +2,16 @@ import React, { Fragment, useState } from "react";
 import ReactDOM from "react-dom";
 import BookList from "./components/book-list";
 import NavBar from "./components/nav-bar";
-import SearchContext from "./context/search";
+import { SearchProvider } from "./context/search";
 import { BooksProvider } from "./context/books";
 
 const App = () => {
-  const [value, setValue] = useState("");
   return (
     <BooksProvider>
-      <SearchContext.Provider value={{ value, setValue }}>
+      <SearchProvider>
         <NavBar />
         <BookList />
-      </SearchContext.Provider>
+      </SearchProvider>
     </BooksProvider>
   );
 };
