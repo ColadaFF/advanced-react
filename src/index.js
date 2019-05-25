@@ -1,14 +1,16 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import ReactDOM from "react-dom";
 import BookList from "./components/book-list";
 import NavBar from "./components/nav-bar";
+import SearchContext from "./context/search";
 
 const App = () => {
+  const [value, setValue] = useState("");
   return (
-    <Fragment>
+    <SearchContext.Provider value={{ value, setValue }}>
       <NavBar />
       <BookList />
-    </Fragment>
+    </SearchContext.Provider>
   );
 };
 

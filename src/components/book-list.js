@@ -1,9 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext
+} from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Book from "./book-item";
-import { findAllBooks } from "../../lib/client";
+import {
+  findAllBooks,
+  searchBooks
+} from "../../lib/client";
+import SearchContext from "../context/search";
 
 const BookList = () => {
+  const search = useContext(SearchContext);
   const [booksStatus, setBooksStatus] = useState({
     data: [],
     loading: true,
@@ -11,22 +20,16 @@ const BookList = () => {
   });
 
   useEffect(() => {
-    findAllBooks()
-      .then(response =>
-        setBooksStatus({
-          loading: false,
-          error: null,
-          data: response.data.findAllBooks
-        })
-      )
-      .catch(error =>
-        setBooksStatus({
-          error,
-          data: [],
-          loading: false
-        })
-      );
-  }, []);
+    if (search.value === "") {
+      findAllBooks()
+        .then(setBooksStatus)
+        .catch(setBooksStatus);
+    } else {
+      searchBooks(search.value)
+        .then(setBooksStatus)
+        .catch(setBooksStatus);
+    }
+  }, [search.value, setBooksStatus]);
   if (booksStatus.loading) {
     return <CircularProgress size={60} />;
   }
